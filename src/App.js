@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import SeasonDisplay from "./SeasonDisplay";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    let status, statusCode;
+    if (navigator.geolocation) {
+      status = 'Loading';
+      statusCode = 1;
+    } else {
+      status = 'Geolocation is not supported by your browser';
+      statusCode = 0;
+    }
+
+    this.state = {lat: null, status: status, statusCode: statusCode};
+    console.log('constructor');
+  }
+
+  componentDidMount() {
+    console.log('component did mount');
+    if (this.state.statusCode === 1) {
+      this.setState({status: 'Locating...'});
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.setState({status: 'Localized', lat: position.coords.latitude})
+        },
+        positionError => {
+          this.setState({status: positionError.message});
+        });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log('component did update');
+  }
+
+
+  render() {
+    console.log('component render');
+    const {status, lat} = this.state;
+    return (
+      <div className="App">
+        Status: {status}
+        <SeasonDisplay lat={lat} />
+      </div>
+    );
+  }
 }
 
 export default App;
