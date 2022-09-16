@@ -14,11 +14,9 @@ class App extends React.Component {
     }
 
     this.state = {lat: null, status: status, statusCode: statusCode};
-    console.log('constructor');
   }
 
   componentDidMount() {
-    console.log('component did mount');
     if (this.state.statusCode === 1) {
       this.setState({status: 'Locating...'});
       navigator.geolocation.getCurrentPosition(
@@ -32,17 +30,15 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('component did update');
+
   }
 
-
   render() {
-    console.log('component render');
     const {status, lat} = this.state;
     return (
       <div className="App">
         Status: {status}
-        <SeasonDisplay lat={lat} />
+        <SeasonDisplay lat={lat}/>
       </div>
     );
   }

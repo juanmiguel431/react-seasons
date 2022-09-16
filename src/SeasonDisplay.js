@@ -1,5 +1,23 @@
 
+const seasonConfig = {
+  summer: {
+    message: "Let's hit the beach",
+    iconName: 'sun'
+  },
+  winter: {
+    message: "Burr, it's chilly",
+    iconName: 'snowflake'
+  },
+  unknown: {
+    message: "Season is unknown",
+    iconName: "question circle outline"
+  },
+};
+
 const getSeason = (lat, month) => {
+  if (lat === null) {
+    return 'unknown';
+  }
   if (month > 2 || month < 9) {
     return lat > 0 ? 'summer' : 'winter';
   }
@@ -7,11 +25,14 @@ const getSeason = (lat, month) => {
 }
 
 const SeasonDisplay = props => {
-  console.log('season display rendered');
   const {lat} = props;
   const season = getSeason(lat, new Date().getMonth());
+  const { message, iconName } = seasonConfig[season];
+
   return <div className="season-display">
-    Season: {season}. Latitude: {lat}
+    <i className={`massive ${iconName} icon`} />
+    <h1>{message}</h1>
+    <i className={`massive ${iconName} icon`} />
   </div>;
 }
 
