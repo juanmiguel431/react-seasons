@@ -34,10 +34,9 @@ class App extends React.Component {
   }
 
   render() {
-    const {status, lat} = this.state;
+    const {lat} = this.state;
     return (
       <div className="App">
-        Status: {status}
         <SeasonDisplay lat={lat}/>
       </div>
     );
