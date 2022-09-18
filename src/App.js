@@ -54,7 +54,7 @@ class App extends React.Component {
     const {lat, status} = this.state;
     return (
       <div className="App">
-        {status?.code === 1 ? <Spinner text="Please, allow the browser detect your location." /> : <SeasonDisplay lat={lat} status={status} />}
+        {status?.code === 1 ? <Spinner message="Please, allow the browser detect your location." /> : <SeasonDisplay lat={lat} status={status} />}
       </div>
     );
   }
