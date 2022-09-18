@@ -1,6 +1,7 @@
 import React from "react";
 import SeasonDisplay from "./SeasonDisplay";
 import Spinner from "./Spinner";
+import './App.css';
 
 const statusConfig = {
   error: {
