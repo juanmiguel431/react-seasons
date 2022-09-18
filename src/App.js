@@ -1,31 +1,48 @@
 import React from "react";
 import SeasonDisplay from "./SeasonDisplay";
+import Spinner from "./Spinner";
+
+const statusConfig = {
+  error: {
+    code: 0,
+    text: 'Geolocation is not supported by your browser',
+  },
+  loading: {
+    code: 1,
+    text: 'Loading'
+  },
+  localized: {
+    code: 2,
+    text: 'Localized'
+  },
+  positionError: {
+    code: 3,
+    text: 'Geolocation was blocked by the user'
+  }
+};
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let status, statusCode;
-    if (navigator.geolocation) {
-      status = 'Loading';
-      statusCode = 1;
-    } else {
-      status = 'Geolocation is not supported by your browser';
-      statusCode = 0;
-    }
-
-    this.state = {lat: null, status: status, statusCode: statusCode};
+    this.state = {lat: null, status: null};
   }
 
   componentDidMount() {
-    if (this.state.statusCode === 1) {
-      this.setState({status: 'Locating...'});
+    if (navigator.geolocation) {
+      const status = statusConfig['loading'];
+      this.setState({status});
       navigator.geolocation.getCurrentPosition(
         position => {
-          this.setState({status: 'Localized', lat: position.coords.latitude})
+          const status = statusConfig['localized'];
+          this.setState({status, lat: position.coords.latitude})
         },
         positionError => {
-          this.setState({status: positionError.message});
+          const status = statusConfig['positionError'];
+          this.setState({status, text: positionError.message});
         });
+    } else {
+      const status = statusConfig['error'];
+      this.setState({status});
     }
   }
 
@@ -34,10 +51,10 @@ class App extends React.Component {
   }
 
   render() {
-    const {lat} = this.state;
+    const {lat, status} = this.state;
     return (
       <div className="App">
-        <SeasonDisplay lat={lat}/>
+        {status?.code === 1 ? <Spinner text="Please, allow the browser detect your location." /> : <SeasonDisplay lat={lat} status={status} />}
       </div>
     );
   }

@@ -25,10 +25,18 @@ const getSeason = (lat, month) => {
   return lat > 0 ? 'winter' : 'summer';
 }
 
-const SeasonDisplay = props => {
-  const {lat} = props;
-  const season = getSeason(lat, new Date().getMonth());
-  const { message, iconName } = seasonConfig[season];
+const SeasonDisplay = ({lat, status}) => {
+  let iconName, message, season;
+  if (status?.code === 2) {
+    season = getSeason(lat, new Date().getMonth());
+    const config = seasonConfig[season];
+    iconName = config.iconName;
+    message = config.message;
+  } else {
+    iconName = 'question circle outline';
+    message = status?.text || 'Season is unknown';
+    season = null;
+  }
 
   return <div className={`season-display ${season}`}>
     <i className={`icon-left massive ${iconName} icon`} />
